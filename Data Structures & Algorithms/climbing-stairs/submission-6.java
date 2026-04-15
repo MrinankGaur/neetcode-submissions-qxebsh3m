@@ -1,14 +1,18 @@
 class Solution {
-    public int climbStairs(int n) {
-        if(n<=2) return n;
-        int dp1 = 1;
-        int dp2 = 2;
-        int ans = 0;
-        for(int i = 3;i<=n;i++){
-            ans = dp1 + dp2;
-            dp1 = dp2;
-            dp2 = ans;
+    public int tribonacci(int n) {
+        if(n<=2){
+            if(n==0) return 0;
+            return 1;
         }
-        return dp2;
+        int prev3 = 0;
+        int prev1 = 1;
+        int prev2 = 1;
+        for(int i = 3;i<=n;i++){
+            int temp = prev1+prev2+prev3;
+            prev3 = prev2;
+            prev2 = prev1;
+            prev1 = temp;
+        }
+        return prev1;
     }
 }
