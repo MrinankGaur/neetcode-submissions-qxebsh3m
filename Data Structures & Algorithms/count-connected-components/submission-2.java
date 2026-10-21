@@ -1,47 +1,36 @@
-class DSU {
-    int[] parent;
-    int[] rank;
-
-    public DSU(int n) {
-        parent = new int[n];
-        rank = new int[n];
-        for (int i = 0; i < n; i++) {
-            parent[i] = i;
-            rank[i] = 1;
-        }
-    }
-
-    public int find(int node) {
-        if(parent[node]==node) return node;
-        return parent[node] = find(parent[node]);
-    }
-
-    public boolean union(int u, int v) {
-        int pu = find(u);
-        int pv = find(v);
-        if (pu == pv) {
-            return false;
-        }
-        if (rank[pv] > rank[pu]) {
-            int temp = pu;
-            pu = pv;
-            pv = temp;
-        }
-        parent[pv] = pu;
-        rank[pu] += rank[pv];
-        return true;
-    }
-}
-
-public class Solution {
+class Solution {
     public int countComponents(int n, int[][] edges) {
-        DSU dsu = new DSU(n);
-        int res = n;
-        for (int[] edge : edges) {
-            if (dsu.union(edge[0], edge[1])) {
-                res--;
+        List<List<Integer>> adj = new ArrayList<>();
+        
+        for(int i = 0;i<n;i++){
+            adj.add(new ArrayList<>());
+        }
+        
+        for(int[] edge:edges){
+            int u = edge[0];
+            int v = edge[1];
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        
+        }
+
+        int res = 0;
+        int[] vis = new int[n];
+
+        for(int i = 0;i<n;i++){
+            if(vis[i]==0){
+                dfs(i,vis,adj);
+                res++;
             }
         }
         return res;
+    }
+    private void dfs(int node, int[] vis, List<List<Integer>> adj){
+        vis[node] = 1;
+        for(int next:adj.get(node)){
+            if(vis[next]==0){
+                dfs(next,vis,adj);
+            }
+        }
     }
 }
